@@ -1,0 +1,7 @@
+py -m venv .venv
+.venv\scripts\activate
+func init LocalFunctionProj --python
+cd LocalFunctionProj
+func new --name FunctionName --template "HTTP trigger" --authlevel "anonymous"S
+pip install azure-servicebus
+pip install pycryptodomex
