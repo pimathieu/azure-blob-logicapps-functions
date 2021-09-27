@@ -11,7 +11,7 @@ Logic Apps running azure function (PaymentProcessor) when a blog is added to Blo
 The funtion PaymentProcessor:
 1) Retrieves encryption key from key vault and decrypt file
 2) Performs any required validation prior to submission for onward processing
-    - Save file to storage
-    - Place message on queue
+    - Saves file to storage
+    - Places message on queue
 
  ![alt text](architecture-design.jpeg)   
