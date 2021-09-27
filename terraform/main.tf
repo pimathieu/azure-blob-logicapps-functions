@@ -262,3 +262,37 @@ resource "azurerm_function_app" "function_app" {
     ]
   }
 }
+
+resource "azurerm_api_management" "apim" {
+  name                = "${var.project}${var.environment}-apim"
+  resource_group_name = azurerm_resource_group.poc-resource-grp.name
+  location            = var.location
+  publisher_name      = var.company
+  publisher_email     = var.email
+
+  sku_name = "Developer_1"
+}
+
+
+resource "azurerm_api_management_api" "api_management_api_public" {
+  name                  = "${var.project}-${var.environment}-api-management-api-public"
+  resource_group_name = azurerm_resource_group.poc-resource-grp.name
+  api_management_name = azurerm_api_management.apim.name
+  revision              = "1"
+  display_name          = "Public"
+  path                  = ""
+  protocols             = ["https"]
+  service_url           = "https://${azurerm_function_app.function_app.default_hostname}/api"
+  subscription_required = false
+}
+
+
+resource "azurerm_api_management_api_operation" "api_management_api_operation_sas_token_gen" {
+  operation_id        = "sas-token-generator"
+  api_name            = azurerm_api_management_api.api_management_api_public.name
+  api_management_name = azurerm_api_management.apim.name
+  resource_group_name =  azurerm_resource_group.poc-resource-grp.name
+  display_name        = "SAS token Generation API endpoint"
+  method              = "GET"
+  url_template        = "/SASTokenGenerator"
+}
